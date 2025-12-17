@@ -7,9 +7,11 @@ import Icon from '@/components/ui/icon';
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
+    setIsMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -30,10 +32,34 @@ export default function Index() {
               <button onClick={() => scrollToSection('reviews')} className="text-foreground hover:text-primary transition-colors">Отзывы</button>
               <button onClick={() => scrollToSection('contacts')} className="text-foreground hover:text-primary transition-colors">Контакты</button>
             </div>
-            <Button onClick={() => scrollToSection('contacts')} className="hidden md:block">
-              Записаться
-            </Button>
+            <div className="flex items-center gap-4">
+              <Button onClick={() => scrollToSection('contacts')} className="hidden md:block">
+                Записаться
+              </Button>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+                aria-label="Меню"
+              >
+                <Icon name={isMobileMenuOpen ? 'X' : 'Menu'} size={24} className="text-foreground" />
+              </button>
+            </div>
           </div>
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 py-4 border-t border-border animate-fade-in">
+              <div className="flex flex-col gap-4">
+                <button onClick={() => scrollToSection('home')} className="text-left text-foreground hover:text-primary transition-colors py-2">Главная</button>
+                <button onClick={() => scrollToSection('services')} className="text-left text-foreground hover:text-primary transition-colors py-2">Услуги</button>
+                <button onClick={() => scrollToSection('doctors')} className="text-left text-foreground hover:text-primary transition-colors py-2">Врачи</button>
+                <button onClick={() => scrollToSection('portfolio')} className="text-left text-foreground hover:text-primary transition-colors py-2">Портфолио</button>
+                <button onClick={() => scrollToSection('reviews')} className="text-left text-foreground hover:text-primary transition-colors py-2">Отзывы</button>
+                <button onClick={() => scrollToSection('contacts')} className="text-left text-foreground hover:text-primary transition-colors py-2">Контакты</button>
+                <Button onClick={() => scrollToSection('contacts')} className="w-full mt-2">
+                  Записаться
+                </Button>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
 
