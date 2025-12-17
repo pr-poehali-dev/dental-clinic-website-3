@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Icon from '@/components/ui/icon';
+import Snowfall from '@/components/Snowfall';
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
@@ -52,6 +53,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Snowfall />
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
