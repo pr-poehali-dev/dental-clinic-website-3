@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,11 +8,46 @@ import Icon from '@/components/ui/icon';
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 500);
+
+      const sections = ['home', 'services', 'doctors', 'portfolio', 'reviews', 'contacts'];
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('section').forEach((section) => {
+        observer.observe(section);
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
     setIsMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -453,6 +488,16 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 p-4 bg-primary text-white rounded-full shadow-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-110 animate-fade-in z-50"
+          aria-label="Вверх"
+        >
+          <Icon name="ArrowUp" size={24} />
+        </button>
+      )}
     </div>
   );
 }
